@@ -1,5 +1,6 @@
-create database company_database;
-use company_database;
+CREATE DATABASE company_database; /* Creating the company's database on the SQL Server*/
+use company_database; /* Giving the command to create the tables into the company database*/
+
 -- Create company database schema with five tables
 /* The first table is Employee table, that is storing information about employees
 The supervisor_id and branch_id are foreign keys, but will be defined after the employee table and branch table are created
