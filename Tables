@@ -1,5 +1,5 @@
 CREATE DATABASE company_database; /* Creating the company's database on the SQL Server*/
-use company_database; /* Giving the command to create the tables into the company database*/
+use company_database; /* Giving this command to use the company database*/
 
 -- Create company database schema with five tables
 /* The first table is Employee table, that is storing information about employees
@@ -21,13 +21,13 @@ branch_id INT PRIMARY KEY,
 branch_name VARCHAR(40),
 manager_id INT,
 manager_start_date DATE,
-FOREIGN KEY (manager_id) REFERENCES employee (employee_id) ON DELETE SET NULL); /* enter explaination */
+FOREIGN KEY (manager_id) REFERENCES employee (employee_id) ON DELETE SET NULL); /* Explaination: if a record in the parent table (employee) is deleted, then the corresponding records in the child table (branch) will have the foreign key fields set to NULL */
 
 # After creating the employee and branch tables, the manager_id and supervisor_id have to be set as foreing keys on the employee table with the following commmands:
  ALTER TABLE employee
  ADD FOREIGN KEY (branch_id)
  REFERENCES branch (branch_id)
- ON DELETE SET NULL /* insert text */;
+ ON DELETE SET NULL;
  
  ALTER TABLE employee
  ADD FOREIGN KEY (supervisor_id)
@@ -40,7 +40,7 @@ FOREIGN KEY (manager_id) REFERENCES employee (employee_id) ON DELETE SET NULL); 
   client_name VARCHAR(40),
   branch_id INT,
   FOREIGN KEY(branch_id) REFERENCES branch(branch_id) 
-  ON DELETE SET NULL); /* insert text */
+  ON DELETE SET NULL); 
 
 # The next table is employee_client_relation with a composite key
 CREATE TABLE employee_client_relation (
@@ -49,7 +49,7 @@ CREATE TABLE employee_client_relation (
   total_sales INT,
   PRIMARY KEY(employee_id, client_id),
   FOREIGN KEY(employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE,
-  FOREIGN KEY(client_id) REFERENCES client(client_id) ON DELETE CASCADE); /* insert text */
+  FOREIGN KEY(client_id) REFERENCES client(client_id) ON DELETE CASCADE); /* Expalination: is used to automatically remove the matching records from the child table (employee_client_relation) when we delete the rows from the parent table (employee and client). */
   
   # The last table is branch-supplier table, again with a composite key
   CREATE TABLE branch_supplier (
@@ -57,17 +57,21 @@ CREATE TABLE employee_client_relation (
   supplier_name VARCHAR(40),
   supply_type VARCHAR(40),
   PRIMARY KEY(branch_id, supplier_name),
-  FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE); /* insert text */
+  FOREIGN KEY(branch_id) REFERENCES branch(branch_id) ON DELETE CASCADE); 
   ----------------------------------------------------------------------------------------------
   -- The following commands fill in the created tables with information. Given the circular relationship between the employee and branch table, the information will be added following these steps:
   # Branch Corporate
   INSERT INTO employee VALUES(100, 'David', 'Wallace', '1967-11-17', 'M', 250000, NULL, NULL); /* supervisor_id and branch_id are set to NULL because there are not created yet */
    INSERT INTO branch VALUES(1, 'Corporate', 100, '2006-02-09');
+  
   UPDATE employee /* inserting the branch_id previoulsy set to NULL */
 SET branch_id = 1
 WHERE employee_id = 100; 
+
 INSERT INTO employee VALUES(101, 'Jan', 'Levinson', '1961-05-11', 'F', 110000, 100, 1); /* inserting the other employees belonging to the corporate branch*/
 INSERT INTO employee VALUES(111, 'Van', 'Lavigne', '1963-06-21', 'M', 130000, 100, 1);
+INSERT INTO employee VALUES(109, 'Zen', 'Bigne', '1973-07-31', 'M', 120000, 100, 1);
+INSERT INTO employee VALUES(110, 'Bin', 'Sin', '1962-06-23', 'F', 160000, 100, 1);
 INSERT INTO employee VALUES(112, 'Sem', 'Timberlake', '1968-07-21', 'M', 210000, 100, 1);
 INSERT INTO employee VALUES(113, 'Anne', 'Gerbi', '1987-01-23', 'F', 117000, 100, 1);
 INSERT INTO employee VALUES(114, 'Viola', 'Muse', '1981-12-11', 'F', 119000, 100, 1);
